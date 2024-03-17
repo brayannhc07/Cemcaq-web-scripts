@@ -1,0 +1,446 @@
+{
+  "DateTime": "2024-02-22 10:00:00",
+  "Locations": {
+    "CAP": {
+      "Code": "CAP",
+      "Name": "Carrillo Puerto",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 1
+    },
+    "COR": {
+      "Code": "COR",
+      "Name": "Corregidora",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 2
+    },
+    "EPG": {
+      "Code": "EPG",
+      "Name": "Epigmenio González",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 3
+    },
+    "FEO": {
+      "Code": "FEO",
+      "Name": "Félix Osores",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 4
+    },
+    "JOV": {
+      "Code": "JOV",
+      "Name": "Josefa Vergara",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 5
+    },
+    "SJU": {
+      "Code": "SJU",
+      "Name": "San Juan del Río",
+      "TimeOffset": 0,
+      "Coordinates": null,
+      "Id": 6
+    }
+  },
+  "Indexes": {
+    "NO2": {
+      "Id": 5,
+      "ParameterCode": "NO2",
+      "Code": "NO2",
+      "Hours": 1,
+      "Weighted": false,
+      "ResultFactor": 1,
+      "RelevantGap": 0,
+      "MinRelevantGapRecords": 0,
+      "Name": "Dióxido de Nitrógeno"
+    },
+    "CO": {
+      "Id": 4,
+      "ParameterCode": "CO",
+      "Code": "CO",
+      "Hours": 8,
+      "Weighted": false,
+      "ResultFactor": 1,
+      "RelevantGap": 0,
+      "MinRelevantGapRecords": 0,
+      "Name": "Monóxido de Carbono"
+    },
+    "O3": {
+      "Id": 6,
+      "ParameterCode": "O3",
+      "Code": "O3",
+      "Hours": 1,
+      "Weighted": false,
+      "ResultFactor": 1,
+      "RelevantGap": 0,
+      "MinRelevantGapRecords": 0,
+      "Name": "Ozono promedio horario"
+    },
+    "SO2": {
+      "Id": 7,
+      "ParameterCode": "SO2",
+      "Code": "SO2",
+      "Hours": 1,
+      "Weighted": false,
+      "ResultFactor": 1,
+      "RelevantGap": 0,
+      "MinRelevantGapRecords": 0,
+      "Name": "Dióxido de Azufre"
+    },
+    "PM2.5": {
+      "Id": 2,
+      "ParameterCode": "PM2.5",
+      "Code": "PM2.5",
+      "Hours": 12,
+      "Weighted": true,
+      "ResultFactor": 0.694,
+      "RelevantGap": 3,
+      "MinRelevantGapRecords": 2,
+      "Name": "Material Particulado"
+    },
+    "PM10": {
+      "Id": 1,
+      "ParameterCode": "PM10",
+      "Code": "PM10",
+      "Hours": 12,
+      "Weighted": true,
+      "ResultFactor": 0.714,
+      "RelevantGap": 3,
+      "MinRelevantGapRecords": 2,
+      "Name": "Meterial Particulado"
+    }
+  },
+  "Parameters": {
+    "NO2": {
+      "Code": "NO2",
+      "Name": "Dióxido de Nitrógeno",
+      "HtmlDisplay": "NO<sub>2<\/sub> (ppm)",
+      "Scale": 0.001,
+      "DecimalDigits": 3,
+      "Id": 1
+    },
+    "CO": {
+      "Code": "CO",
+      "Name": "Monóxido de Carbono",
+      "HtmlDisplay": "CO (ppm)",
+      "Scale": 1,
+      "DecimalDigits": 2,
+      "Id": 2
+    },
+    "O3": {
+      "Code": "O3",
+      "Name": "Ozono",
+      "HtmlDisplay": "O<sub>3<\/sub> (ppm)",
+      "Scale": 0.001,
+      "DecimalDigits": 3,
+      "Id": 3
+    },
+    "SO2": {
+      "Code": "SO2",
+      "Name": "Dióxido de Azufre",
+      "HtmlDisplay": "SO<sub>2<\/sub> (ppm)",
+      "Scale": 0.001,
+      "DecimalDigits": 3,
+      "Id": 4
+    },
+    "PM2.5": {
+      "Code": "PM2.5",
+      "Name": "Material Particulado",
+      "HtmlDisplay": "PM<sub>2.5<\/sub> (µg/m<sup>3<\/sup>)",
+      "Scale": 1,
+      "DecimalDigits": 0,
+      "Id": 5
+    },
+    "PM10": {
+      "Code": "PM10",
+      "Name": "Meterial Particulado",
+      "HtmlDisplay": "PM<sub>10<\/sub> (µg/m<sup>3<\/sup>)",
+      "Scale": 1,
+      "DecimalDigits": 0,
+      "Id": 6
+    }
+  },
+  "Categories": {
+    "1": {
+      "Id": 1,
+      "Quality": "Buena",
+      "RiskLevel": "Bajo",
+      "Color": "Verde",
+      "ColorHex": "#00e400"
+    },
+    "2": {
+      "Id": 2,
+      "Quality": "Aceptable",
+      "RiskLevel": "Moderado",
+      "Color": "Amarillo",
+      "ColorHex": "#ffff00"
+    },
+    "3": {
+      "Id": 3,
+      "Quality": "Mala",
+      "RiskLevel": "Alto",
+      "Color": "Naranja",
+      "ColorHex": "#ff7e00"
+    },
+    "4": {
+      "Id": 4,
+      "Quality": "Muy Mala",
+      "RiskLevel": "Muy Alto",
+      "Color": "Rojo",
+      "ColorHex": "#ff0000"
+    },
+    "5": {
+      "Id": 5,
+      "Quality": "Extremadamente Mala",
+      "RiskLevel": "Extremadamente Alto",
+      "Color": "Morado",
+      "ColorHex": "#8f3f97"
+    },
+    "0": {
+      "Id": 0,
+      "Quality": "En mantenimiento",
+      "RiskLevel": "",
+      "Color": "Blanco",
+      "ColorHex": "#FFFFFF"
+    },
+    "-1": {
+      "Id": -1,
+      "Quality": "No se mide",
+      "RiskLevel": "",
+      "Color": "Azul",
+      "ColorHex": "#ADD8E6"
+    }
+  },
+  "Results": {
+    "NO2": {
+      "CAP": {
+        "Index": 0.043,
+        "CategoryId": 1,
+        "LocationCode": "CAP",
+        "ParameterCode": "NO2"
+      },
+      "COR": {
+        "Index": 0.065,
+        "CategoryId": 2,
+        "LocationCode": "COR",
+        "ParameterCode": "NO2"
+      },
+      "EPG": {
+        "Index": 0.081,
+        "CategoryId": 2,
+        "LocationCode": "EPG",
+        "ParameterCode": "NO2"
+      },
+      "FEO": {
+        "Index": 0.047,
+        "CategoryId": 1,
+        "LocationCode": "FEO",
+        "ParameterCode": "NO2"
+      },
+      "JOV": {
+        "Index": 0.075,
+        "CategoryId": 2,
+        "LocationCode": "JOV",
+        "ParameterCode": "NO2"
+      },
+      "SJU": {
+        "Index": 0.129,
+        "CategoryId": 3,
+        "LocationCode": "SJU",
+        "ParameterCode": "NO2"
+      }
+    },
+    "CO": {
+      "CAP": {
+        "Index": 2.2,
+        "CategoryId": 1,
+        "LocationCode": "CAP",
+        "ParameterCode": "CO"
+      },
+      "COR": {
+        "Index": 1.32,
+        "CategoryId": 1,
+        "LocationCode": "COR",
+        "ParameterCode": "CO"
+      },
+      "EPG": {
+        "Index": 2.23,
+        "CategoryId": 1,
+        "LocationCode": "EPG",
+        "ParameterCode": "CO"
+      },
+      "FEO": {
+        "Index": 1.82,
+        "CategoryId": 1,
+        "LocationCode": "FEO",
+        "ParameterCode": "CO"
+      },
+      "JOV": {
+        "Index": 2.16,
+        "CategoryId": 1,
+        "LocationCode": "JOV",
+        "ParameterCode": "CO"
+      },
+      "SJU": {
+        "Index": 1.61,
+        "CategoryId": 1,
+        "LocationCode": "SJU",
+        "ParameterCode": "CO"
+      }
+    },
+    "O3": {
+      "CAP": {
+        "Index": 0.019,
+        "CategoryId": 1,
+        "LocationCode": "CAP",
+        "ParameterCode": "O3"
+      },
+      "COR": {
+        "Index": 0.007,
+        "CategoryId": 1,
+        "LocationCode": "COR",
+        "ParameterCode": "O3"
+      },
+      "EPG": {
+        "Index": 0.002,
+        "CategoryId": 1,
+        "LocationCode": "EPG",
+        "ParameterCode": "O3"
+      },
+      "FEO": {
+        "Index": 0.013,
+        "CategoryId": 1,
+        "LocationCode": "FEO",
+        "ParameterCode": "O3"
+      },
+      "JOV": {
+        "Index": 0.007,
+        "CategoryId": 1,
+        "LocationCode": "JOV",
+        "ParameterCode": "O3"
+      },
+      "SJU": {
+        "Index": 0.01,
+        "CategoryId": 1,
+        "LocationCode": "SJU",
+        "ParameterCode": "O3"
+      }
+    },
+    "SO2": {
+      "CAP": {
+        "Index": 0.019,
+        "CategoryId": 1,
+        "LocationCode": "CAP",
+        "ParameterCode": "SO2"
+      },
+      "COR": {
+        "Index": 0.004,
+        "CategoryId": 1,
+        "LocationCode": "COR",
+        "ParameterCode": "SO2"
+      },
+      "EPG": {
+        "Index": 0.017,
+        "CategoryId": 1,
+        "LocationCode": "EPG",
+        "ParameterCode": "SO2"
+      },
+      "FEO": {
+        "Index": 0.021,
+        "CategoryId": 1,
+        "LocationCode": "FEO",
+        "ParameterCode": "SO2"
+      },
+      "JOV": {
+        "Index": 0.007,
+        "CategoryId": 1,
+        "LocationCode": "JOV",
+        "ParameterCode": "SO2"
+      },
+      "SJU": {
+        "Index": 0.055,
+        "CategoryId": 2,
+        "LocationCode": "SJU",
+        "ParameterCode": "SO2"
+      }
+    },
+    "PM2.5": {
+      "CAP": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "CAP",
+        "ParameterCode": "PM2.5"
+      },
+      "COR": {
+        "Index": 23,
+        "CategoryId": 2,
+        "LocationCode": "COR",
+        "ParameterCode": "PM2.5"
+      },
+      "EPG": {
+        "Index": 29,
+        "CategoryId": 2,
+        "LocationCode": "EPG",
+        "ParameterCode": "PM2.5"
+      },
+      "FEO": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "FEO",
+        "ParameterCode": "PM2.5"
+      },
+      "JOV": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "JOV",
+        "ParameterCode": "PM2.5"
+      },
+      "SJU": {
+        "Index": 33,
+        "CategoryId": 2,
+        "LocationCode": "SJU",
+        "ParameterCode": "PM2.5"
+      }
+    },
+    "PM10": {
+      "CAP": {
+        "Index": 144,
+        "CategoryId": 4,
+        "LocationCode": "CAP",
+        "ParameterCode": "PM10"
+      },
+      "COR": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "COR",
+        "ParameterCode": "PM10"
+      },
+      "EPG": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "EPG",
+        "ParameterCode": "PM10"
+      },
+      "FEO": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "FEO",
+        "ParameterCode": "PM10"
+      },
+      "JOV": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "JOV",
+        "ParameterCode": "PM10"
+      },
+      "SJU": {
+        "Index": null,
+        "CategoryId": -1,
+        "LocationCode": "SJU",
+        "ParameterCode": "PM10"
+      }
+    }
+  }
+}
