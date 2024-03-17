@@ -1,3 +1,135 @@
+<?php
+
+$json        = file_get_contents('reporte_ica.json');
+$indexReport = json_decode($json, true);
+
+// Get max category id per location
+foreach ($indexReport["Locations"] as $locationCode => $location) {
+    $maxCategoryId = 0;
+    foreach ($indexReport["Results"] as $indexCode => $indexResult) {
+        if ($indexResult[$locationCode]["CategoryId"] > $maxCategoryId) {
+            $maxCategoryId = $indexResult[$locationCode]["CategoryId"];
+        }
+    }
+
+    $indexReport["Locations"][$locationCode]["MaxCategoryId"] = $maxCategoryId;
+}
+
+// emissionSources
+
+$emissionSources = [
+    "almacenes"      => [
+        "name"     => "Almacenes",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Almacen.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/combustibles.png",
+    ],
+    "banos"          => [
+        "name"     => "Baños",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Banos.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/banios.png",
+    ],
+    "carpinterias"   => [
+        "name"     => "Carpinterías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Carpinterias.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/carpinteria.png",
+    ],
+    "terminal"       => [
+        "name"     => " Terminal de autobuses",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/BTerminal.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/terminal.png",
+    ],
+    "constructoras"  => [
+        "name"     => "Constructoras",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Constructoras_new.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/construction.png",
+    ],
+    "carton"         => [
+        "name"     => "Depósito de Cartón",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Carton.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/deposito_carton.png",
+    ],
+    "gaseras"        => [
+        "name"     => "Gaseras",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Gas.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/Gasera.png",
+    ],
+    "fotocopiadoras" => [
+        "name"     => "Fotocopiadoras",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Copias.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/printer.png",
+    ],
+    "gasolineras"    => [
+        "name"     => "Gasolineras",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Gasolina.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/gasolina.png",
+    ],
+    "hojalateria"    => [
+        "name"     => "Hojalaterías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Hojalateria.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/hojalateria.png",
+    ],
+    "hospitales"     => [
+        "name"     => "Hospitales",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Hospital.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/hospital.png",
+    ],
+    "hoteles"        => [
+        "name"     => "Hoteles",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Hoteles.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/Hotel.png",
+    ],
+    "laboratorios"   => [
+        "name"     => "Laboratorios",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Laboratorio.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/laboratorio.png",
+    ],
+    "panaderias"     => [
+        "name"     => "Panaderías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Pan.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/pan.png",
+    ],
+    "rosticerias"    => [
+        "name"     => "Rosticerías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Pollo.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/pollo.png",
+    ],
+    "impresiones"    => [
+        "name"     => "Talleres de Impresión",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/TImpresion.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/taller_impresion.png",
+    ],
+    "pintura"        => [
+        "name"     => "Talleres de Pintura",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/TPintar.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/hojalateria.png",
+    ],
+    "electricos"     => [
+        "name"     => "Talleres eléctricos",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/TElectrico.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/taller_electrico.png",
+    ],
+    "mecanicos"      => [
+        "name"     => "Taller mecánico",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/TMecanico.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/taller_mecanico.png",
+    ],
+    "tintorerias"    => [
+        "name"     => "Tintorería",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Tintoreria.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/tintoreria.png",
+    ],
+    "tlapalarias"    => [
+        "name"     => "Tlapalerías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Tlapaleria.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/tlapaleria.png",
+    ],
+    "tostilleria"    => [
+        "name"     => "Tortillerías",
+        "kmlData"  => "http://aire.cemcaq.mx/pronosticos/kml/Tortilleria.kmz",
+        "imageUrl" => "http://aire.cemcaq.mx/pronosticos/iconos/mapa/tortilleria.png",
+    ],
+];
+?>
 <link href="http://www.cemcaq.mx/pronosticos/css/forms-concentracion.css"
       rel="stylesheet"/>
 <link rel="stylesheet"
@@ -151,22 +283,6 @@
 
 </style>
 
-<?php
-$json        = file_get_contents('reporte_ica.json');
-$indexReport = json_decode($json, true);
-
-// Get max category id per location
-foreach ($indexReport["Locations"] as $locationCode => $location) {
-    $maxCategoryId = 0;
-    foreach ($indexReport["Results"] as $indexCode => $indexResult) {
-        if ($indexResult[$locationCode]["CategoryId"] > $maxCategoryId) {
-            $maxCategoryId = $indexResult[$locationCode]["CategoryId"];
-        }
-    }
-
-    $indexReport["Locations"][$locationCode]["MaxCategoryId"] = $maxCategoryId;
-}
-?>
 <h2>INDICE DE AIRE Y SALUD </h2>
 <p class="pDatos">
   Esta información se actualiza cada hora <br>
@@ -174,23 +290,49 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
 </p>
 
 
-<button id='btnNavigate' name='btnNavigate' class='button'
+<button id='btnNavigate'
+        name='btnNavigate'
+        class='button'
+        style="color: #bbb;"
         onclick='navigateToSJR()'>Ir a San Juan del Río
 </button>
-<button id='btnNavigateReturn' name='btnNavigateReturn' class='button'
+<button id='btnNavigateReturn'
+        name='btnNavigateReturn'
+        class='button'
+        style="color: #bbb;"
         onclick='navigateToQro()'>Regresar a Qro.
 </button>
 <div id="relativeDiv">
   <div id="cinta-show-hide-legend"
        class="cinta-show-hide-legend">
-                    <span class="cinta-show-hide-span ">
-                        &nbsp<img class="cinta-show-hide-legend-img"
-                                  id="show-hide-img"
-                                  src="http://www.cemcaq.mx/pronosticos/iconos/mapa/hide.png"
-                                  alt="img">
-                        &nbsp&nbsp
-                        Querétaro
-                    </span>
+    <span class="cinta-show-hide-span ">
+        <img class="cinta-show-hide-legend-img"
+             id="show-hide-img"
+             src="http://www.cemcaq.mx/pronosticos/iconos/mapa/hide.png"
+             alt="img">
+        Querétaro
+    </span>
+  </div>
+  <div id="main-legend" class="container-diagnostico-main">
+    <div class="container-diagnostico">
+      <h5>Inventario de fuentes fijas</h5>
+        <?php
+        foreach ($emissionSources as $id => $source): ?>
+          <label
+            style="width: 100%;display: flex;justify-content: center;align-items: start;gap: 8px;">
+            <input type="checkbox"
+                   value="<?= $id ?>">
+            <span
+              style="display: flex;flex-direction: column;align-items: center; gap: 4px; text-align: center;">
+                <?= $source["name"] ?>
+                <img class="imgLeyend"
+                     src="<?= $source['imageUrl'] ?>"
+                     alt="<?= $source["name"] ?>">
+              </span>
+          </label>
+        <?php
+        endforeach; ?>
+    </div>
   </div>
   <div id="mapContainer"></div>
   <br>
@@ -282,8 +424,8 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
 <div class="overlay" id="overlay">
   <div class="popup" id="popup">
     <button type="button"
-       id="btn-cerrar-popup"
-       class="btn-cerrar-popup">
+            id="btn-cerrar-popup"
+            class="btn-cerrar-popup">
       <i class="fas fa-times"></i>
     </button>
     <div class="popup-data" id="popup-data"></div>
@@ -296,7 +438,9 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
 <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnnzmm550Bo1McFJZ_MCaQ5IKha6TH8G8"></script>
 <script type="text/javascript">
+  let isSidebarVisible = false;
   const reportICAData = <?= json_encode($indexReport)?>;
+  const kmlSources = <?= json_encode($emissionSources)?>;
   const btnNavigate = document.getElementById('btnNavigate');
   const btnNavigateReturn = document.getElementById('btnNavigateReturn');
   const mapContainerElement = document.getElementById('mapContainer');
@@ -315,6 +459,33 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
     btnNavigate.style.display = 'block';
     btnNavigateReturn.style.display = 'none';
   }
+
+  $('#show-hide-img').click(function () {
+    $('#main-legend').animate({
+      width: 'toggle',
+      opacity: '0.9',
+    }, 'fast');
+    if (isSidebarVisible) {
+      $('#show-hide-img').attr('src', 'http://www.cemcaq.mx/pronosticos/iconos/mapa/show.png');
+    } else {
+      $('#show-hide-img').attr('src', 'http://www.cemcaq.mx/pronosticos/iconos/mapa/hide.png');
+    }
+    isSidebarVisible = !isSidebarVisible;
+  });
+
+  function activateMap(kmlId) {
+    const kmlLayer = kmlSources[kmlId].layer;
+    if (kmlLayer.getMap() === null) {
+      kmlLayer.setMap(mapComponent);
+    } else {
+      kmlLayer.setMap(null);
+    }
+  }
+
+  $('input[type="checkbox"]').click(function () {
+    const kmlLayerId = ($(this)).prop('value');
+    activateMap(kmlLayerId);
+  });
 
   function initMap() {
     const isMobileScreenSize = screen.width < 1024;
@@ -409,7 +580,7 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
                 </td>
                 <td class="td-contaminante"
                     style="background-color:${category.ColorHex};">
-                  <span>${indexResult.Index ?? ""}</span>
+                  <span>${indexResult.Index ?? ''}</span>
                 </td>
               </tr>`;
     }
@@ -447,10 +618,23 @@ foreach ($indexReport["Locations"] as $locationCode => $location) {
       });
 
       google.maps.event.addListener(marker, 'click', function () {
-        console.log("open");
         infoTable.innerHTML = getPopUpTemplate(location, Object.values(reportICAData.Results));
         overlayElement.classList.add('active');
       });
+    }
+
+    // apply kml in map
+    for (const kmlSourcesKey in kmlSources) {
+      const source = kmlSources[kmlSourcesKey];
+      const kmlLayer = new google.maps.KmlLayer(source.kmlData, {
+        suppressInfoWindows: false,
+        preserveViewport: true,
+        map: mapComponent,
+      });
+      if (kmlLayer.getMap() !== null) {
+        kmlLayer.setMap(null);
+      }
+      kmlSources[kmlSourcesKey].layer = kmlLayer;
     }
   }
 
