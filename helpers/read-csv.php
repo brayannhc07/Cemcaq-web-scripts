@@ -116,3 +116,38 @@ function csvToCustomAssocArray(
 
     return $result;
 }
+
+function readCsvToArray($filename, $keyColumnName = null) {
+    // Check if the file exists and is readable
+    if (!file_exists($filename) || !is_readable($filename)) {
+        return false;
+    }
+
+    $data = array();
+    // Open the CSV file for reading
+    if (($handle = fopen($filename, 'r')) !== false) {
+        // Read the first row to get the headers
+        $headers = fgetcsv($handle, 1000, ',');
+
+        // Find the index of the key column, if specified
+        $keyColumnIndex = $keyColumnName ? array_search($keyColumnName, $headers) : false;
+
+        // Loop through each subsequent line in the CSV file
+        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+            // Combine headers with row values
+            $rowData = array_combine($headers, $row);
+
+            if ($keyColumnIndex !== false && isset($row[$keyColumnIndex])) {
+                // Use the value of the specified column as the key
+                $data[$row[$keyColumnIndex]] = $rowData;
+            } else {
+                // Use a numeric index
+                $data[] = $rowData;
+            }
+        }
+        // Close the file after reading
+        fclose($handle);
+    }
+
+    return $data;
+}
