@@ -18,10 +18,19 @@ try {
 }
 ?>
 
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
-  rel="stylesheet"/>
-
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+    rel="stylesheet"/>
+  <title>Series de tiempo</title>
+</head>
+<body>
 <div>
   <div class="flex m-4">
     <div class="flex-none">
@@ -108,12 +117,13 @@ try {
   const datasets = Object.keys(measurementValues)
     .filter(key => key !== <?= json_encode(DATETIME_COLUMN) ?>)
     .map((key) => {
-    return {
-      label: key,
-      data: Object.values(measurementValues[key]),
-      borderWidth: 1,
-    };
-  });
+      return {
+        label: key,
+        data: Object.values(measurementValues[key]),
+        borderWidth: 2,
+        tension: 0.3,
+      };
+    });
 
   new Chart(ctx, {
     type: <?= json_encode($_GET['type']) ?>,
@@ -122,6 +132,11 @@ try {
       datasets: datasets,
     },
     options: {
+      fill: false,
+      interaction: {
+        intersect: false,
+      },
+      radius: 0,
       scales: {
         y: {
           beginAtZero: true,
@@ -130,3 +145,6 @@ try {
     },
   });
 </script>
+
+</body>
+</html>

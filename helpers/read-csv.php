@@ -56,12 +56,48 @@ function getColumnValuesFromCsv($filePath, $columnName, $delimiter = ',')
 /**
  * @throws \Exception
  */
+function filterDataByDateRange(
+    $arrayData,
+    $datetimeColumn,
+    $startDate,
+    $endDate
+) {
+    // Check if the datetime column exists in the data
+    if ( ! isset($arrayData[$datetimeColumn])) {
+        throw new Exception("DateTime column not found.");
+    }
+
+    // Convert the start and end dates to DateTime objects for comparison
+    $startDate = strtotime($startDate);
+    $endDate   = strtotime($endDate);
+
+    // Initialize an array to store the filtered data
+    $filteredData = [];
+
+    // Iterate through each date in the datetime column
+    foreach ($arrayData[$datetimeColumn] as $index => $date) {
+        // Convert the current date to a DateTime object
+        $currentDate = strtotime($date);
+        // Check if the current date falls within the specified date range
+        if ($currentDate >= $startDate && $currentDate <= $endDate) {
+            // Add all columns' data for the matching date to the filtered data
+            foreach ($arrayData as $key => $values) {
+                $filteredData[$key][] = $values[$index];
+            }
+        }
+    }
+
+    // Return the filtered data
+    return $filteredData;
+}
+
+/**
+ * @throws \Exception
+ */
 function csvToCustomAssocArray(
     $filePath,
     $pivotColumn,
-    $valueColumns,
-    $startDate,
-    $endDate
+    $valueColumns
 ) {
     $result = array_fill_keys(array_merge([$pivotColumn], $valueColumns), []);
 
@@ -80,28 +116,17 @@ function csvToCustomAssocArray(
                     return array_search($col, $header);
                 }, $valueColumns);
 
-                // Convert the startDate and endDate to timestamps for comparison
-                $startTimestamp = strtotime($startDate);
-                $endTimestamp   = strtotime($endDate);
-
                 // Loop through each row in the CSV file
                 while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                     // Extract the pivot value
                     $pivotValue = $row[$pivotIndex];
-                    // Convert the pivotValue to a timestamp for comparison
-                    $pivotTimestamp = strtotime($pivotValue);
 
-                    // Check if the pivot value is within the date range
-                    if ($pivotTimestamp >= $startTimestamp
-                        && $pivotTimestamp <= $endTimestamp
-                    ) {
-                        // Add the pivot value to the result array
-                        $result[$pivotColumn][] = $pivotValue;
+                    // Add the pivot value to the result array
+                    $result[$pivotColumn][] = $pivotValue;
 
-                        // Extract the values for each value column and add to result array
-                        foreach ($valueColumns as $i => $col) {
-                            $result[$col][] = $row[$valueIndexes[$i]];
-                        }
+                    // Extract the values for each value column and add to result array
+                    foreach ($valueColumns as $i => $col) {
+                        $result[$col][] = $row[$valueIndexes[$i]];
                     }
                 }
             } else {
@@ -117,20 +142,22 @@ function csvToCustomAssocArray(
     return $result;
 }
 
-function readCsvToArray($filename, $keyColumnName = null) {
+function readCsvToArray($filename, $keyColumnName = null)
+{
     // Check if the file exists and is readable
-    if (!file_exists($filename) || !is_readable($filename)) {
+    if ( ! file_exists($filename) || ! is_readable($filename)) {
         return false;
     }
 
-    $data = array();
+    $data = [];
     // Open the CSV file for reading
     if (($handle = fopen($filename, 'r')) !== false) {
         // Read the first row to get the headers
         $headers = fgetcsv($handle, 1000, ',');
 
         // Find the index of the key column, if specified
-        $keyColumnIndex = $keyColumnName ? array_search($keyColumnName, $headers) : false;
+        $keyColumnIndex = $keyColumnName ? array_search($keyColumnName,
+            $headers) : false;
 
         // Loop through each subsequent line in the CSV file
         while (($row = fgetcsv($handle, 1000, ',')) !== false) {

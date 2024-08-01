@@ -2,11 +2,11 @@
 
 include_once '../helpers/read-csv.php';
 const DATETIME_COLUMN = "Date_Time";
-$filePath       = '../data/ica_72hrs.csv';
+$filePath       = '../data/historico_ica.csv';
 $categoriesPath = '../data/categories.csv';
 $intervalsPath  = '../data/intervals.csv';
 
-$type     = isset($_GET['type']) ? $_GET['type'] : 'line';
+$type     = 'line';
 $from     = isset($_GET['from']) ? $_GET['from'] : '';
 $to       = isset($_GET['to']) ? $_GET['to'] : '';
 $variable = isset($_GET['variable']) ? $_GET['variable'] : [];
@@ -16,7 +16,8 @@ try {
     $intervals         = readCsvToArray($intervalsPath);
     $intervals         = array_filter($intervals,
         function ($interval) use ($variable) {
-            return $interval['IndexCode'] === str_replace('PM25', 'PM2.5', $variable);
+            return $interval['IndexCode'] === str_replace('PM25', 'PM2.5',
+                    $variable);
         });
     $intervals         = array_map(function ($interval) use ($categories) {
         $interval['ColorHex']
@@ -33,8 +34,14 @@ try {
             return strpos($header, "_".$variable) !== false;
         });
     $measurementValues = csvToCustomAssocArray($filePath, DATETIME_COLUMN,
-        $variables, $from." 00:00:00", $to." 23:59:59");
+        $variables);
 
+    $minDateTime       = min($measurementValues[DATETIME_COLUMN]);
+    $minDateTime      = date('Y-m-d', strtotime($minDateTime));
+    $maxDateTime       = max($measurementValues[DATETIME_COLUMN]);
+    $maxDateTime      = date('Y-m-d', strtotime($maxDateTime));
+
+    $measurementValues = filterDataByDateRange($measurementValues, DATETIME_COLUMN, $from." 00:00:00", $to." 23:59:59");
     $maxMeasurementValue = array_filter($measurementValues, function ($key) {
         return $key !== DATETIME_COLUMN;
     }, ARRAY_FILTER_USE_KEY);
@@ -50,30 +57,29 @@ try {
     $intervals           = [];
     $categories          = [];
     $maxMeasurementValue = 0;
+    $minDateTime         = '';
+    $maxDateTime         = '';
 }
 ?>
 
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
-  rel="stylesheet"/>
 
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+    rel="stylesheet"/>
+  <title>ICA</title>
+</head>
+<body>
 <div>
   <div class="flex m-4">
     <div class="flex-none">
       <form class="w-64 bg-white rounded-lg p-4 shadow-lg space-y-3">
-        <div>
-          <label for="type"
-                 class="block mb-2 text-sm font-medium text-gray-900">
-            Tipo de gráfica
-          </label>
-          <select id="type"
-                  name="type"
-                  required
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option value="line">Line</option>
-            <option value="bar">Bar</option>
-          </select>
-        </div>
         <div>
           <label for="from"
                  class="block mb-2 text-sm font-medium text-gray-900">
@@ -82,7 +88,9 @@ try {
           <input type="date"
                  id="from"
                  name="from"
-                 value="<?= $from ?>"
+                 value="<?= $from ?: $minDateTime ?>"
+                 min="<?= $minDateTime ?>"
+                 max="<?= $maxDateTime ?>"
                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                  placeholder="Fecha de Inicio" required/>
         </div>
@@ -94,7 +102,9 @@ try {
           <input type="date"
                  id="to"
                  name="to"
-                 value="<?= $to ?>"
+                 value="<?= $to ?: $maxDateTime ?>"
+                  min="<?= $minDateTime ?>"
+                  max="<?= $maxDateTime ?>"
                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                  placeholder="Fecha de Fin" required/>
         </div>
@@ -138,22 +148,23 @@ try {
 <script>
   const ctx = document.getElementById('myChart');
   const maxMeasurementValue = <?= json_encode($maxMeasurementValue) ?>;
-  const intervals = Object.values(<?= json_encode($intervals, JSON_NUMERIC_CHECK) ?>);
+  const intervals = Object.values(<?= json_encode($intervals,
+      JSON_NUMERIC_CHECK) ?>);
   const datetimeValues = <?= json_encode($measurementValues[DATETIME_COLUMN]) ?>;
   const measurementValues = <?= json_encode($measurementValues,
       JSON_NUMERIC_CHECK) ?>;
 
   const annotations = intervals.filter(interval => interval['FloorValue'] <= maxMeasurementValue)
     .map((interval, index, array) => {
-    return {
-      type: 'box',
-      yMin: interval['FloorValue'],
-      yMax: index === array.length - 1 ? maxMeasurementValue : array[index + 1]['FloorValue'],
-      backgroundColor: interval['ColorHex'] + '09',
-      borderColor: interval['ColorHex'],
-      borderWidth: 1,
-    };
-  });
+      return {
+        type: 'box',
+        yMin: interval['FloorValue'],
+        yMax: index === array.length - 1 ? maxMeasurementValue : array[index + 1]['FloorValue'],
+        backgroundColor: interval['ColorHex'] + '09',
+        borderColor: interval['ColorHex'],
+        borderWidth: 1,
+      };
+    });
   const datasets = Object.keys(measurementValues)
     .filter(key => key !== <?= json_encode(DATETIME_COLUMN) ?>)
     .map((key) => {
@@ -161,17 +172,22 @@ try {
         label: key,
         data: Object.values(measurementValues[key]),
         borderWidth: 2,
-        tension: 0.3
+        tension: 0.3,
       };
     });
 
   new Chart(ctx, {
-    type: <?= json_encode($_GET['type']) ?>,
+    type: <?= json_encode($type) ?>,
     data: {
       labels: datetimeValues,
       datasets: datasets,
     },
     options: {
+      fill: false,
+      interaction: {
+        intersect: false,
+      },
+      radius: 0,
       scales: {
         y: {
           beginAtZero: true,
@@ -188,3 +204,5 @@ try {
     },
   });
 </script>
+</body>
+</html>
