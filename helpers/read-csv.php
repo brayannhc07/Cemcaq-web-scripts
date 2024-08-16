@@ -160,7 +160,7 @@ function readCsvToArray($filename, $keyColumnName = null)
             $headers) : false;
 
         // Loop through each subsequent line in the CSV file
-        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+        while (($row = fgetcsv($handle, null, ',')) !== false) {
             // Combine headers with row values
             $rowData = array_combine($headers, $row);
 
@@ -171,6 +171,33 @@ function readCsvToArray($filename, $keyColumnName = null)
                 // Use a numeric index
                 $data[] = $rowData;
             }
+        }
+        // Close the file after reading
+        fclose($handle);
+    }
+
+    return $data;
+}
+
+function readCsvFromFile($filename, $separator=',')
+{
+    // Check if the file exists and is readable
+    if ( ! file_exists($filename) || ! is_readable($filename)) {
+        return false;
+    }
+
+    $data = [];
+    // Open the CSV file for reading
+    if (($handle = fopen($filename, 'r')) !== false) {
+        // Read the first row to get the headers
+        $headers = fgetcsv($handle, 1000, $separator);
+
+        // Find the index of the key column, if specified
+        $data[] = $headers;
+
+        // Loop through each subsequent line in the CSV file
+        while (($row = fgetcsv($handle, 1000, $separator)) !== false) {
+            $data[] = $row;
         }
         // Close the file after reading
         fclose($handle);
